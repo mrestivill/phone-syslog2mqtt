@@ -27,30 +27,32 @@ This is designed to be a replacement for the [docker-pap2t-mqtt](https://github.
 
 * Go 1.21+ (for building from source)
 * MQTT Broker (e.g., Mosquitto, Home Assistant MQTT, etc.)
-* Grandstream HT801V2 with syslog enabled and pointing to this bridge's IP.
+* PAP with syslog enabled and pointing to this bridge's IP.
 
 ## Installation
+
+
 
 #### Option 1: Run with Docker (recommended)
 
 ```bash
 docker run -d \
-  --name grandstream-mqtt \
+  --name phone-syslog2mqtt \
   --restart unless-stopped \
   -p 514:514/udp \
   -e MQTTOP_BROKER="tcp://your-mqtt-broker:1883" \
   -e MQTT_USER="optional-username" \
   -e MQTT_PASS="optional-password" \
   -e DEVICE_IP="192.168.10.7" \
-  mrestivill/grandstream-mqtt:latest
+  ghcr.io/mrestivill/phone-syslog2mqtt:latest
 ```
 
 #### Option 2: Build from Source
 
 ```bash
-git clone https://github.com/mrestivill/grandstream-mqtt.git
-cd grandstream-mqtt
-go build .o grandstream-mqtt ./...
+git clone https://github.com/mrestivill/phone-syslog2mqtt.git
+cd phone-syslog2mqtt
+go build .o phone-syslog2mqtt ./...
 
 / Then run:
 export MQTTOP_BROKER="tcp://localhost:1883"
@@ -71,7 +73,7 @@ The bridge is configured via the following environment variables:
 | SYSLOG_PORT         | UDP port to listen on                          | 514                   |
 | DEVICE_IP           | IP address of your Grandstream from which to accept messages | 192.168.10.7          |
 | MQTT_TOPIC_STATUS  | MQTT topic for call state                     | phone/status          |
-| MQTT_TOPIC_CALLER | MQQT topic for last caller ID                | phone/last_caller_id  |
+| MQTT_TOPIC_CALLER | MQTT topic for last caller ID                | phone/last_caller_id  |
 
 ## Grandstream HT801V2 Syslog Setup
 
@@ -87,9 +89,10 @@ The bridge is configured via the following environment variables:
 
 The bridge publishes retained messages to two topics (configurable):
 
-````md
+```md
 phone/status          -> "Incoming" (or "Idle", "InCall", "Outgoing")
 phone/last_caller_id  -> "+3464534534"
+```
 
 
 Call state changes are published immediately upon receiving the relevant syslog messages. The last caller ID is updated only when an incoming call is detected.
@@ -106,9 +109,6 @@ logger -n your-bridge-ip -P 514 "Apr 20 21:24:34 HT801V2 [ec:74:d7:b3:c6:cc] [1.
 
 The program uses hard-coded strings to identify call events (incoming ring, call connected, call ended). If your HT801V2's syslog messages differ, you may need to modify the strings in `main.go`. Please file an issue or pull request if you have different firmware versions that use alternative wording.
 
-## License
-
-MIT
 
 ## Acknowledgements
 
