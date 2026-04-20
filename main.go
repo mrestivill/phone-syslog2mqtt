@@ -19,7 +19,7 @@ var (
 	mqttUser     = getEnv("MQTT_USER", "")
 	mqttPass     = getEnv("MQTT_PASS", "")
 	syslogPort   = getEnv("SYSLOG_PORT", "514")
-	deviceIP     = getEnv("DEVICE_IP", "192.168.10.7")
+	deviceIP     = getEnv("DEVICE_IP", "192.168.1.1")
 
 	// MQTT topics
 	topicStatus     = getEnv("MQTT_TOPIC_STATUS", "phone/status")
