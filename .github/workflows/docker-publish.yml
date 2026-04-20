@@ -1,11 +1,11 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image (Multi-Arch)
 
 on:
   push:
     branches:
       - main
     tags:
-      - '*'
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -24,6 +24,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: linux/amd64,linux/arm64,linux/riscv64
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -47,13 +52,15 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=sha
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (multi-platform)
         uses: docker/build-push-action@v5
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64,linux/riscv64
           cache-from: type=gha
           cache-to: type=gha,mode=max
