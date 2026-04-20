@@ -57,7 +57,7 @@ go build .o phone-syslog2mqtt ./...
 / Then run:
 export MQTTOP_BROKER="tcp://localhost:1883"
 export DEVICE_IP="192.168.10.7"
-./grandstream-mqtt
+./phone-syslog2mqtt
 ```
 
 ## Configuration
