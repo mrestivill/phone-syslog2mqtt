@@ -43,7 +43,7 @@ docker run -d \
   -e MQTTOP_BROKER="tcp://your-mqtt-broker:1883" \
   -e MQTT_USER="optional-username" \
   -e MQTT_PASS="optional-password" \
-  -e DEVICE_IP="192.168.10.7" \
+  -e DEVICE_IP="192.168.1.x" \
   ghcr.io/mrestivill/phone-syslog2mqtt:latest
 ```
 
@@ -56,7 +56,7 @@ go build .o phone-syslog2mqtt ./...
 
 / Then run:
 export MQTTOP_BROKER="tcp://localhost:1883"
-export DEVICE_IP="192.168.10.7"
+export DEVICE_IP="192.168.1.x"
 ./phone-syslog2mqtt
 ```
 
@@ -71,7 +71,7 @@ The bridge is configured via the following environment variables:
 | MQTT_USER           | MQTT username (optional)                      |                       |
 | MQTT_PASS           | MQTT password (optional)                      |                       |
 | SYSLOG_PORT         | UDP port to listen on                          | 514                   |
-| DEVICE_IP           | IP address of your Grandstream from which to accept messages | 192.168.10.7          |
+| DEVICE_IP           | IP address of your Grandstream from which to accept messages | 192.168.1.x          |
 | MQTT_TOPIC_STATUS  | MQTT topic for call state                     | phone/status          |
 | MQTT_TOPIC_CALLER | MQTT topic for last caller ID                | phone/last_caller_id  |
 
